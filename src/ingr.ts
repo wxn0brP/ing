@@ -3,7 +3,7 @@
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { homedir } from "os";
-
+import { ing } from "./ing";
 
 export function ingr(name?: string) {
     process.chdir(homedir());
@@ -16,7 +16,7 @@ export function ingr(name?: string) {
             process.chdir(name);
             execSync("git pull", { stdio: "inherit" });
             execSync("bun install", { stdio: "inherit" });
-            execSync("ing", { stdio: "inherit" });
+            ing();
             process.chdir("..");
             process.exit(0);
         }
@@ -24,7 +24,7 @@ export function ingr(name?: string) {
         process.chdir(name);
         execSync("bun install", { stdio: "inherit" });
         console.log(`Installed ${name}`);
-        execSync("ing", { stdio: "inherit" });
+        ing();
     } else {
         const dirs = readdirSync(".", { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
         for (const dir of dirs) {
